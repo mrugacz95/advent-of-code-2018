@@ -25,7 +25,7 @@ def choose_ids(box_ids: List[str]):
 def part1():
     input = puzzle.input_data.split()
     box_ids = choose_ids(input)
-    puzzle.answer_a = str(len(box_ids[3]) * len(box_ids[2]))
+    puzzle.answer_a = len(box_ids[3]) * len(box_ids[2])
 
 
 def diff_on_one_pos(a, b):

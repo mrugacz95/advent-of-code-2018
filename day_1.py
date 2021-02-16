@@ -20,7 +20,7 @@ def part2():
             ans = current_freq
             break
         frequencies.add(current_freq)
-    puzzle.answer_b = str(ans)
+    puzzle.answer_b = ans
 
 
 if __name__ == '__main__':
