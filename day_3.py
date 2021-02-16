@@ -39,12 +39,12 @@ class Rect:
             h = min(self.y + self.h, other.y + other.h) - y
             return Rect(None, x, y, w, h)
 
-    def to_coords(self):
-        coords = set()
+    def to_pieces(self):
+        pieces = set()
         for x in range(self.x, self.x + self.w):
             for y in range(self.y, self.y + self.h):
-                coords.add((y, x))
-        return coords
+                pieces.add((y, x))
+        return pieces
 
     def area(self):
         return self.w * self.h
@@ -53,16 +53,29 @@ class Rect:
         return f'Rect#{self.id}<{self.x}, {self.y}, {self.w}, {self.y}>'
 
 
+rectangles = list(map(Rect.from_claim, puzzle.input_data.split("\n")))
+
+
 def part1():
-    rects = list(map(Rect.from_claim, puzzle.input_data.split("\n")))
-    coords = set()
-    for idx, r1 in enumerate(rects):
-        for r2 in rects[idx + 1:]:
+    pieces = set()
+    for idx, r1 in enumerate(rectangles):
+        for r2 in rectangles[idx + 1:]:
             intersection = r1.intersection(r2)
             if intersection is not None:
-                coords.update(intersection.to_coords())
-    puzzle.answer_a = len(coords)
+                pieces.update(intersection.to_pieces())
+    puzzle.answer_a = len(pieces)
+
+
+def part2():
+    for r1 in rectangles:
+        for r2 in rectangles:
+            if r1.id != r2.id and r1.collide(r2):
+                break
+        else:
+            puzzle.answer_b = r1.id
+            break
 
 
 if __name__ == '__main__':
     part1()
+    part2()
