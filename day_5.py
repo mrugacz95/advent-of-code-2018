@@ -33,7 +33,6 @@ def part_2():
     unit_types = set(polimer.lower())
     min_len = float('inf')
     for c in unit_types:
-        print(c)
         short = shorten(polimer.replace(c, '').replace(c.upper(), ''))
         min_len = min(min_len, len(short))
     puzzle.answer_b = min_len
