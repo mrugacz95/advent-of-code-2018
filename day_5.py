@@ -9,22 +9,15 @@ def are_different_polarity(a: str, b: str):
 
 def shorten(polymer):
     idx = 1
-    from_beginning = True
     while True:
         if are_different_polarity(polymer[idx], polymer[idx - 1]):
             polymer = polymer[:idx - 1] + polymer[idx + 1:]
-            idx -= 2
-            from_beginning = False
+            idx -= 1
         else:
             if idx < len(polymer) - 1:
                 idx += 1
             else:
-                if from_beginning:
-                    break
-                else:
-                    from_beginning = True
-                    idx = 1
-    print('done')
+                break
     return polymer
 
 
@@ -36,11 +29,16 @@ def part_1():
 
 def part_2():
     data = puzzle.input_data
-    unit_types = ['a', 'b', 'c', 'd']
-    ans = min([len(shorten(data.replace(c, '').replace(c.upper(), ''))) for c in unit_types])
-    puzzle.answer_b = ans
+    polimer = shorten(data)
+    unit_types = set(polimer.lower())
+    min_len = float('inf')
+    for c in unit_types:
+        print(c)
+        short = shorten(polimer.replace(c, '').replace(c.upper(), ''))
+        min_len = min(min_len, len(short))
+    puzzle.answer_b = min_len
 
 
 if __name__ == '__main__':
-    # part_1()
+    part_1()
     part_2()
