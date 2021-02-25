@@ -137,7 +137,6 @@ def solve():
 
     region_size = 0
     for y in range(min_y, max_y + 1):
-        print(y)
         found_row = False
         for x in range(min_x, max_x + 1):
             closest = closest_to(Point(y, x))
