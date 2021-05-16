@@ -18,14 +18,14 @@ def step(recipes, elves, logging=False):
         recipes.append(sum_recipe)
     for idx, elf in enumerate(elves):
         elves[idx] = (elf + recipes[elf] + 1) % len(recipes)
-    # if logging:
-    #     for idx, recipe in enumerate(map(str, recipes)):
-    #         if idx in elves:
-    #             elf_id = elves.index(idx)
-    #             print(brackets[elf_id][0] + str(recipe) + brackets[elf_id][1], end='')
-    #         else:
-    #             print(' ' + recipe, end=' ', )
-    #     print()
+    if logging:
+        for idx, recipe in enumerate(map(str, recipes)):
+            if idx in elves:
+                elf_id = elves.index(idx)
+                print(brackets[elf_id][0] + str(recipe) + brackets[elf_id][1], end='')
+            else:
+                print(' ' + recipe, end=' ', )
+        print()
 
 
 def part_1(recipes_made, logging=False):
