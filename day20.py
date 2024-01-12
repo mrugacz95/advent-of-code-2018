@@ -194,24 +194,7 @@ def print_board(board):
     print('\n'.join([''.join(row) for row in printable]))
 
 
-def furthest_room(board):
-    queue = deque([(0, 0)])
-    dist = defaultdict(lambda: float('inf'))
-    dist[(0, 0)] = 0
-    visited = set()
-    while len(queue) > 0:
-        room = queue.popleft()
-        if room in visited:
-            continue
-        for neighbour in board[room]:
-            if dist[neighbour] > dist[room] + 1:
-                dist[neighbour] = dist[room] + 1
-                queue.append(neighbour)
-    return max(dist.values())
-
-
-def part1(input_data, debug=False):
-    full_path = parse(input_data)
+def build_board(full_path, debug=False):
     board = defaultdict(set)
     board[(0, 0)] = set()
 
@@ -242,20 +225,44 @@ def part1(input_data, debug=False):
 
     dfs(full_path, 0, 0)
 
-    return furthest_room(board)
+    return board
 
 
-def part2(input_data):
-    data = parse(input_data)
-    return -1
+def calc_distances(board):
+    queue = deque([(0, 0)])
+    dist = defaultdict(lambda: float('inf'))
+    dist[(0, 0)] = 0
+    visited = set()
+    while len(queue) > 0:
+        room = queue.popleft()
+        if room in visited:
+            continue
+        for neighbour in board[room]:
+            if dist[neighbour] > dist[room] + 1:
+                dist[neighbour] = dist[room] + 1
+                queue.append(neighbour)
+    return dist
+
+
+def part1(input_data, debug=False):
+    full_path = parse(input_data)
+    board = build_board(full_path, debug)
+    dist = calc_distances(board)
+    return max(dist.values())
+
+
+def part2(input_data, debug=False):
+    full_path = parse(input_data)
+    board = build_board(full_path, debug)
+    dist = calc_distances(board)
+    print_board(board)
+    return len(list(filter(lambda x: x >= 1000, dist.values())))
 
 
 def main():
     assert 3 == part1("^WNE$")
     assert 2 == part1("^N(E|W)N$")
-    #
     assert 10 == part1("^ENWWW(NEEE|SSE(EE|N))$")
-    #
     assert 18 == part1("^ENNWSWW(NEWS|)SSSEEN(WNSE|)EE(SWEN|)NNN$")
     assert 23 == part1("^ESSWWN(E|NNENN(EESS(WNSE|)SSS|WWWSSSSE(SW|NNNE)))$")
     assert 31 == part1("^WSSEESWWWNW(S|NENNEEEENN(ESSSSW(NWSW|SSEN)|WSWWN(E|WWS(E|SS))))$")
@@ -265,19 +272,21 @@ def main():
     puzzle.answer_a = part1(puzzle.input_data)
     print("part1 OK")
 
-    # assert 0 == part2(puzzle.examples[0].input_data)
-    # print("part2 example OK")
-    #
-    # puzzle.answer_b = part2(puzzle.input_data)
-    # print("part2 OK")
+    puzzle.answer_b = part2(puzzle.input_data)
+    print("part2 OK")
 
 
 if __name__ == '__main__':
     main()
 
 # ENWWW(NEEE|SSE(EE|N))
-# ENWWW      |
-# |          |
-# NEEE      SSE
-#          | |
-#         EE N
+# ENWWW|
+#      |
+#    -----
+#   |    |
+#  NEEE  |
+#       SSE|
+#          |
+#         --
+#        | |
+#       EE N
